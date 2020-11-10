@@ -18,9 +18,9 @@ import WordList from './components/WordList';
 
 const App: () => React$Node = () => {
   const [words, setWords] = useState([
-    {word: 'word 1', id: '0'},
-    {word: 'word 2', id: '1'},
-    {word: 'word 3', id: '2'},
+    {word: 'word 1', id: '0', definition: 'poop balls the third went to town riding on his pony'},
+    {word: 'word 2', id: '1', definition: 'poop balls the third went to town riding on his pony'},
+    {word: 'word 3', id: '2', definition: 'poop balls the third went to town riding on his pony'},
     {word: 'word 1', id: '0'},
     {word: 'word 2', id: '1'},
     {word: 'word 3', id: '2'},
