@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "android-debug": "react-native run-android --variant debug",
+    "android-release": "react-native run-android --variant release",
+    "ios": "react-native run-ios --simulator='iPhone X'",
+    "pods": "cd ios && pod install && cd ..",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
