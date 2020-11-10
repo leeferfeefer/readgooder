@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
     FlatList,
     StyleSheet,
@@ -31,13 +31,11 @@ const WordList = (props) => {
 
 const styles = StyleSheet.create({
     list: {    
-        backgroundColor: 'blue',    
     },
     emptyListComponent: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'green',
+        justifyContent: 'center'
     }
 });
 

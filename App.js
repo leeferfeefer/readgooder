@@ -15,26 +15,22 @@ import {
 } from 'react-native';
 import Button from './components/Button';
 import WordList from './components/WordList';
+import WordModal from './components/WordModal';
 
 const App: () => React$Node = () => {
   const [words, setWords] = useState([
     {word: 'word 1', id: '0', definition: 'poop balls the third went to town riding on his pony'},
     {word: 'word 2', id: '1', definition: 'poop balls the third went to town riding on his pony'},
-    {word: 'word 3', id: '2', definition: 'poop balls the third went to town riding on his pony'},
-    {word: 'word 1', id: '0'},
-    {word: 'word 2', id: '1'},
-    {word: 'word 3', id: '2'},
-    {word: 'word 1', id: '0'},
-    {word: 'word 2', id: '1'},
-    {word: 'word 3', id: '2'},
-    {word: 'word 1', id: '0'},
-    {word: 'word 2', id: '1'},
-    {word: 'word 3', id: '2'}
+    {word: 'word 3', id: '2', definition: 'poop balls the third went to town riding on his pony'}
   ]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const setModalVisbility = (isVisible) => {
+    setIsModalVisible(isVisible);
+  };
 
   const addButtonPressed = () => {
-    console.log("pressed");
+    setModalVisbility(true);
   }
   
   return (
@@ -50,6 +46,12 @@ const App: () => React$Node = () => {
             width={60}
           />
         </View>        
+        {isModalVisible && 
+          <WordModal 
+            isVisible={isModalVisible}
+            setModalVisbility={setModalVisbility}
+          />
+        }
       </SafeAreaView>
     </>
   );
