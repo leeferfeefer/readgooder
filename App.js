@@ -22,6 +22,8 @@ import Spinner from './components/Spinner';
 import WordDeletionActionSheet from './components/WordDeletionActionSheet';
 import Word from './models/Word';
 import Alert from './components/Alert';
+import DictionaryService from './services/Dictionary.service';
+import DefinitionParser from './services/DefinitionParser.service';
 
 const actionSheetRef = createRef();
 
@@ -43,26 +45,8 @@ const App: () => React$Node = () => {
   }, []);
 
   const setModalVisbility = async (isVisible, wordToAdd) => {
-    setIsModalVisible(isVisible);
-    if (!!wordToAdd) {
-      setLoadingState(true);
-        const addedWords = await AsyncStorageService.getData('@words');        
-        if (!!!addedWords || addedWords.length === 0) {
-          const wordObj = new Word(wordToAdd, 'def', 0);
-          await AsyncStorageService.storeData([wordObj], '@words');
-        } else {
-          if (!addedWords.some(addedWord => addedWord.word === wordToAdd)) {      
-            const lastWord = addedWords[addedWords.length-1];     
-            const newWord = new Word(wordToAdd, 'def', lastWord.id+1);                 
-            await AsyncStorageService.storeData([...addedWords, newWord], '@words');
-          } else {
-            Alert.showAlert("Ahem!", "You already done did added that ya dummy!");
-          }
-        } 
-        setLoadingState(false);   
-
-      await getWords();
-    }
+    setIsModalVisible(isVisible);    
+    !isVisible && !!wordToAdd && await addWord(wordToAdd);
   };
 
   const setLoadingState = (isLoading) => {
@@ -79,12 +63,45 @@ const App: () => React$Node = () => {
   }
 
   const setDeleteWordConfirmSheetVisibility = (isVisible, wordID) => {
-    !!wordID && setWordIDToDelete(wordID);
+    if (isVisible) {
+      setWordIDToDelete(wordID);     
+    }
     actionSheetRef.current?.setModalVisible(isVisible);
+
   }
 
   const onDeleteWordPress = async () => {
     setDeleteWordConfirmSheetVisibility(false);
+    await deleteWord();
+  }
+
+  const addWord = async (wordToAdd) => {
+    setLoadingState(true);  
+    try {
+      const definitionResponse = await DictionaryService.getDefintion(wordToAdd);
+      const definition = DefinitionParser.parse(wordToAdd, definitionResponse);
+      const addedWords = await AsyncStorageService.getData('@words');        
+      if (!!!addedWords || addedWords.length === 0) {
+        const wordObj = new Word(wordToAdd, definition, 0);
+        await AsyncStorageService.storeData([wordObj], '@words');
+      } else {
+        if (!addedWords.some(addedWord => addedWord.word === wordToAdd)) {      
+          const lastWord = addedWords[addedWords.length-1];     
+          const newWord = new Word(wordToAdd, definition, lastWord.id+1);                 
+          await AsyncStorageService.storeData([...addedWords, newWord], '@words');
+        } else {
+          Alert.showAlert("Ahem!", "You already done did added that ya dummy!");
+        }
+      } 
+      await getWords(false);
+    } catch (error) {
+      console.log("The error in getting defintion: ", error);
+      Alert.showAlert("Ahem!", "Could not add word. Try again.");
+    }
+    setLoadingState(false);   
+  };
+
+  const deleteWord = async () => {
     setLoadingState(true);
     const words = await AsyncStorageService.getData('@words');        
     if (!!words) {

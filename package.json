@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "react-native-async-storage/async-storage",
+    "axios": "^0.21.0",
     "react": "16.13.1",
     "react-native": "0.63.3",
     "react-native-actions-sheet": "^0.3.5"
