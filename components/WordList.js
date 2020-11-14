@@ -48,6 +48,7 @@ const WordList = (props) => {
 
 const styles = StyleSheet.create({
     list: {    
+        flex: 1
     },
     emptyListComponent: {
         flex: 1,

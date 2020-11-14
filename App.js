@@ -124,11 +124,11 @@ const App: () => React$Node = () => {
             height={60}
             width={60}
           />
-          <Button 
+          {/* <Button 
             onPress={clearButtonPressed}
             height={60}
             width={60}
-          ><Text>Clear Words</Text></Button>
+          ><Text>Clear Words</Text></Button> */}
         </View>        
         {isModalVisible && 
           <WordModal 

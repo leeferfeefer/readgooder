@@ -3,7 +3,8 @@ import {
     StyleSheet,
     Dimensions,
     View,
-    Text
+    Text,
+    ScrollView
 } from 'react-native';
 import Button from './Button';
 
@@ -26,7 +27,7 @@ const WordCard = (props) => {
         <View style={styles.itemContainer}>
             <Button onPress={onWordPress} onLongPress={onWordLongPress} width={'100%'} height={'60%'}>
                 <View style={styles.card}>
-                    <Text style={styles.word}>{item.word}</Text>
+                    <Text style={styles.word}>{item.word}</Text>    
                     {isWordPressed && <Text style={styles.definition}>{item.definition}</Text>}
                 </View>    
             </Button>            
@@ -37,17 +38,20 @@ const WordCard = (props) => {
 const styles = StyleSheet.create({
     itemContainer: {
         width: Dimensions.get('screen').width,
+        height: 700
     },
     card: {
-        flex: 1,
-        margin: 30,
+        margin: 10,
         backgroundColor: LIGHT_GRAY,
-        borderRadius: 20
+        borderRadius: 20,
+        height: '100%'
     },
     word: {
         fontSize: 35,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        borderBottomColor: 'black',
+        borderBottomWidth: 1
     },
     definition: {
         fontSize: 18,
