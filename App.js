@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, createRef} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -19,16 +19,22 @@ import WordList from './components/WordList';
 import WordModal from './components/WordModal';
 import AsyncStorageService from './services/AsyncStorage.service';
 import Spinner from './components/Spinner';
+import WordDeletionActionSheet from './components/WordDeletionActionSheet';
+import Word from './models/Word';
+import Alert from './components/Alert';
+
+const actionSheetRef = createRef();
 
 const App: () => React$Node = () => {
   const [words, setWords] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [wordIDToDelete, setWordIDToDelete] = useState(undefined);
 
-  const getWords = async () => {
-    setLoadingState(true);
+  const getWords = async (controlLoading = true) => {
+    controlLoading && setLoadingState(true);
     let words = await AsyncStorageService.getData('@words');
-    setLoadingState(false);
+    controlLoading && setLoadingState(false);
     words = words ?? [];
     setWords(words);
   };
@@ -36,9 +42,27 @@ const App: () => React$Node = () => {
     getWords();
   }, []);
 
-  const setModalVisbility = async (isVisible) => {
+  const setModalVisbility = async (isVisible, wordToAdd) => {
     setIsModalVisible(isVisible);
-    !isVisible && await getWords();
+    if (!!wordToAdd) {
+      setLoadingState(true);
+        const addedWords = await AsyncStorageService.getData('@words');        
+        if (!!!addedWords || addedWords.length === 0) {
+          const wordObj = new Word(wordToAdd, 'def', 0);
+          await AsyncStorageService.storeData([wordObj], '@words');
+        } else {
+          if (!addedWords.some(addedWord => addedWord.word === wordToAdd)) {      
+            const lastWord = addedWords[addedWords.length-1];     
+            const newWord = new Word(wordToAdd, 'def', lastWord.id+1);                 
+            await AsyncStorageService.storeData([...addedWords, newWord], '@words');
+          } else {
+            Alert.showAlert("Ahem!", "You already done did added that ya dummy!");
+          }
+        } 
+        setLoadingState(false);   
+
+      await getWords();
+    }
   };
 
   const setLoadingState = (isLoading) => {
@@ -53,12 +77,29 @@ const App: () => React$Node = () => {
     await AsyncStorageService.clearAll();
     await getWords();
   }
+
+  const setDeleteWordConfirmSheetVisibility = (isVisible, wordID) => {
+    !!wordID && setWordIDToDelete(wordID);
+    actionSheetRef.current?.setModalVisible(isVisible);
+  }
+
+  const onDeleteWordPress = async () => {
+    setDeleteWordConfirmSheetVisibility(false);
+    setLoadingState(true);
+    const words = await AsyncStorageService.getData('@words');        
+    if (!!words) {
+      const newWords = words.filter(word => word.id !== wordIDToDelete);
+      await AsyncStorageService.storeData(newWords, '@words');
+    } 
+    await getWords(false);
+    setLoadingState(false);
+  }
   
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
-        <WordList words={words}/>
+        <WordList words={words} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>
         <View style={styles.addButtonContainer}>
           <Button 
             imageSource={require('./assets/add.png')} 
@@ -66,19 +107,19 @@ const App: () => React$Node = () => {
             height={60}
             width={60}
           />
-          {/* <Button 
+          <Button 
             onPress={clearButtonPressed}
             height={60}
             width={60}
-          ><Text>Clear Words</Text></Button> */}
+          ><Text>Clear Words</Text></Button>
         </View>        
         {isModalVisible && 
           <WordModal 
             isVisible={isModalVisible}
             setModalVisbility={setModalVisbility}
-            setLoadingState={setLoadingState}
           />
         }
+        <WordDeletionActionSheet actionSheetRef={actionSheetRef} onButtonPress={onDeleteWordPress}/>
         <Spinner isSpinning={isLoading}/>
       </SafeAreaView>
     </>

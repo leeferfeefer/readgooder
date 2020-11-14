@@ -7,42 +7,25 @@ import {
     TextInput
 } from 'react-native';
 import Button from './Button';
-import AsyncStorageService from '../services/AsyncStorage.service';
-import Word from '../models/Word';
 
 const BLUE = "#428AF8";
 const LIGHT_GRAY = "#D3D3D3";
 
 const WordModal = (props) => {
-    const {isVisible, setModalVisbility, setLoadingState} = props;
+    const {isVisible, setModalVisbility} = props;
     const [isFocused, setIsFocused] = useState(false);
-    const [word, setWord] = useState('');
+    const [word, setWord] = useState(undefined);
 
-    const handleFocus = (event) => {
+    const handleFocus = () => {
       setIsFocused(true);      
     };
 
-    const handleBlur = (event) => {
+    const handleBlur = () => {
       setIsFocused(false);
     };
 
     const addButtonPressed = async () => {
-      if (word !== '') {
-        setLoadingState(true);
-        const words = await AsyncStorageService.getData('@words');        
-        if (!!!words) {
-          const wordObj = new Word(word, 'def', 0);
-          await AsyncStorageService.storeData([wordObj], '@words');
-        } else {
-          if (!words.some(addedWord => addedWord.word === word)) {      
-            const lastWord = words[words.length-1];     
-            const newWord = new Word(word, 'def', lastWord.id+1);                 
-            await AsyncStorageService.storeData([...words, newWord], '@words');
-          }
-        } 
-        setLoadingState(false);        
-      }
-      setModalVisbility(false);
+      setModalVisbility(false, word);
     }
 
     return (
@@ -62,9 +45,7 @@ const WordModal = (props) => {
                       underlineColorAndroid={isFocused ? BLUE : LIGHT_GRAY}              
                       onFocus={handleFocus}
                       onBlur={handleBlur}
-                      onChangeText={(text) => {
-                        setWord(text);
-                      }}
+                      onChangeText={setWord}
                       value={word}
                     />
                     <Button 

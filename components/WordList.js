@@ -9,7 +9,7 @@ import WordCard from './WordCard';
 import Button from './Button';
 
 const WordList = (props) => {
-    const {words} = props;
+    const {words, setDeleteWordConfirmSheetVisibility} = props;
 
     const emptyListComponent = () => (
         <View style={styles.emptyListComponent}>
@@ -18,10 +18,7 @@ const WordList = (props) => {
     );
 
     const toTopButtonPressed = () => {
-        this.flatList.scrollToIndex({
-            animated: true,
-            index: 0
-        });
+        words.length > 1 && this.flatList.scrollToIndex({animated: true, index: 0});
     }
 
     return (
@@ -35,7 +32,7 @@ const WordList = (props) => {
                 pagingEnabled
                 ListEmptyComponent={emptyListComponent()}
                 data={words}
-                renderItem={({item}) => <WordCard item={item}/>}            
+                renderItem={({item}) => <WordCard item={item} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>}            
                 keyExtractor={item => `${item.id}`}>            
             </FlatList>
             <Button
@@ -43,7 +40,7 @@ const WordList = (props) => {
                 onPress={toTopButtonPressed}
                 height={30}
                 width={30}
-                isDisabled={words.length === 0}
+                isDisabled={words.length < 2}
             />
         </>
     );
