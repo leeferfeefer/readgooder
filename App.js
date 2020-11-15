@@ -85,7 +85,7 @@ const App: () => React$Node = () => {
         const wordObj = new Word(wordToAdd, definition, 0);
         await AsyncStorageService.storeData([wordObj], '@words');
       } else {
-        if (!addedWords.some(addedWord => addedWord.word === wordToAdd)) {      
+        if (!addedWords.some(addedWord => addedWord.word.toLowerCase() === wordToAdd.toLowerCase())) {      
           const lastWord = addedWords[addedWords.length-1];     
           const newWord = new Word(wordToAdd, definition, lastWord.id+1);                 
           await AsyncStorageService.storeData([...addedWords, newWord], '@words');
@@ -95,7 +95,6 @@ const App: () => React$Node = () => {
       } 
       await getWords(false);
     } catch (error) {
-      console.log("The error in getting defintion: ", error);
       Alert.showAlert("Ahem!", "Could not add word. Try again.");
     }
     setLoadingState(false);   
