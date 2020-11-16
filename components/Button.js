@@ -12,7 +12,7 @@ const Button = (props) => {
             style={{width, height, ...style}} 
             onPress={onPress} 
             onLongPress={onLongPress} 
-            isDisabled={isDisabled}>
+            disabled={isDisabled}>
                 {imageSource && 
                     <Image
                         source={imageSource}

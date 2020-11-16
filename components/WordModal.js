@@ -16,7 +16,9 @@ const WordModal = (props) => {
     const {isVisible, setModalVisbility} = props;
     const [isFocused, setIsFocused] = useState(false);
     const [word, setWord] = useState(undefined);
+    const [isValidationError, setIsValidationError] = useState(false);
 
+  
     const handleFocus = () => {
       setIsFocused(true);      
     };
@@ -28,6 +30,22 @@ const WordModal = (props) => {
     const addButtonPressed = async () => {
       setModalVisbility(false, word);
     }
+
+    const handleChangeText = (word) => {
+      setWord(word);    
+      // TODO: Fix this
+      setIsValidationError(!(/^(?:[A-Za-z]+|\d+)$/.test(word)));
+    };
+
+    const getUnderlineColor = () => {
+      if (isValidationError) {
+        return 'red'
+      };
+      if (isFocused) {
+        return BLUE;
+      }
+      return LIGHT_GRAY;
+    };
 
     return (
         <Modal
@@ -43,15 +61,17 @@ const WordModal = (props) => {
                       style={styles.inputField}
                       placeholder='Add Word'
                       selectionColor={BLUE}
-                      underlineColorAndroid={isFocused ? BLUE : LIGHT_GRAY}              
+                      underlineColorAndroid={getUnderlineColor()}              
                       onFocus={handleFocus}
                       onBlur={handleBlur}
-                      onChangeText={setWord}
+                      onChangeText={handleChangeText}
                       value={word}
                     />
+                    {isValidationError && <Text style={styles.errorMessage}>Only letters!</Text>}
                     <Button
                       style={styles.addButtonStyle}
-                      onPress={addButtonPressed}              
+                      onPress={addButtonPressed}   
+                      isDisabled={isValidationError}           
                     ><Text>Add</Text></Button>
                 </View>
             </View>
@@ -94,6 +114,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center'
+      },
+      errorMessage: {
+        color: 'red'
       }      
 });
 
