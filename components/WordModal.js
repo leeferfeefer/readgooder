@@ -4,7 +4,8 @@ import {
     StyleSheet,
     View, 
     Modal,
-    TextInput
+    TextInput,
+    Text
 } from 'react-native';
 import Button from './Button';
 
@@ -48,12 +49,10 @@ const WordModal = (props) => {
                       onChangeText={setWord}
                       value={word}
                     />
-                    <Button 
-                      imageSource={require('../assets/add.png')} 
-                      onPress={addButtonPressed}
-                      height={30}
-                      width={30}
-                    />
+                    <Button
+                      style={styles.addButtonStyle}
+                      onPress={addButtonPressed}              
+                    ><Text>Add</Text></Button>
                 </View>
             </View>
       </Modal>
@@ -87,6 +86,14 @@ const styles = StyleSheet.create({
         height: 50,
         width: '90%',
         marginVertical: 30
+      },
+      addButtonStyle: {
+        height: 30, 
+        width: 100,
+        backgroundColor: LIGHT_GRAY,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
       }      
 });
 

@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, {useState, useEffect, createRef} from 'react';
 import {
   SafeAreaView,
@@ -24,6 +16,7 @@ import Word from './models/Word';
 import Alert from './components/Alert';
 import DictionaryService from './services/Dictionary.service';
 import DefinitionParser from './services/DefinitionParser.service';
+import DeviceInfo from 'react-native-device-info';
 
 const actionSheetRef = createRef();
 
@@ -123,11 +116,13 @@ const App: () => React$Node = () => {
             height={60}
             width={60}
           />
-          {/* <Button 
-            onPress={clearButtonPressed}
-            height={60}
-            width={60}
-          ><Text>Clear Words</Text></Button> */}
+          {DeviceInfo.isEmulator() && 
+            <Button 
+              onPress={clearButtonPressed}
+              height={60}
+              width={60}
+            ><Text>Clear Words</Text></Button>
+          }
         </View>        
         {isModalVisible && 
           <WordModal 

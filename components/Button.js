@@ -6,10 +6,10 @@ import {
 } from 'react-native';
 
 const Button = (props) => {
-    const {onPress, imageSource, children, width, height, onLongPress, isDisabled} = props;
+    const {onPress, imageSource, children, width, height, onLongPress, isDisabled, style} = props;
     return (
         <TouchableOpacity 
-            style={{width, height}} 
+            style={{width, height, ...style}} 
             onPress={onPress} 
             onLongPress={onLongPress} 
             isDisabled={isDisabled}>
@@ -24,9 +24,7 @@ const Button = (props) => {
     );
 };
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});
 
 export default Button;
 
