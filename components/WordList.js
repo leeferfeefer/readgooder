@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
     FlatList,
     StyleSheet,
@@ -9,7 +9,14 @@ import WordCard from './WordCard';
 import Button from './Button';
 
 const WordList = (props) => {
+    const flatListRef = useRef(null);
     const {words, setDeleteWordConfirmSheetVisibility} = props;
+    const [index, setIndex] = useState(words.length);
+
+    useEffect(() => {
+        setIndex(words.length);
+    }, [words]);
+
 
     const emptyListComponent = () => (
         <View style={styles.emptyListComponent}>
@@ -18,23 +25,35 @@ const WordList = (props) => {
     );
 
     const toTopButtonPressed = () => {
-        words.length > 1 && this.flatList.scrollToIndex({animated: true, index: 0});
+        words.length > 1 && flatListRef.current.scrollToIndex({animated: true, index: 0});
     }
+
+    const onViewableItemsChanged = ({ viewableItems, changed }) => {
+        setIndex(viewableItems[0].index+1);
+    }
+
+    const viewabilityConfig = {
+        viewAreaCoveragePercentThreshold: 50
+    }
+    const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }])
+
 
     return (
         <>
             <FlatList     
-                ref={ref => {this.flatList = ref}}
-                onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
+                ref={flatListRef}
+                onContentSizeChange={() => flatListRef.current.scrollToEnd({animated: true})}
                 contentContainerStyle={{ flexGrow: 1 }} 
                 style={styles.list}
                 horizontal
                 pagingEnabled
                 ListEmptyComponent={emptyListComponent()}
                 data={words}
-                renderItem={({item}) => <WordCard item={item} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>}            
+                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+                renderItem={({item, index}) => <WordCard item={item} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>}            
                 keyExtractor={item => `${item.id}`}>            
             </FlatList>
+            <Text>{index} / {words.length}</Text>
             <Button
                 imageSource={require('../assets/left.png')} 
                 onPress={toTopButtonPressed}

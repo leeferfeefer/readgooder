@@ -17,6 +17,7 @@ import Alert from './components/Alert';
 import DictionaryService from './services/Dictionary.service';
 import DefinitionParser from './services/DefinitionParser.service';
 import DeviceInfo from 'react-native-device-info';
+import {version} from './package.json';
 
 const actionSheetRef = createRef();
 
@@ -73,6 +74,9 @@ const App: () => React$Node = () => {
     try {
       const definitionResponse = await DictionaryService.getDefintion(wordToAdd);
       const definition = DefinitionParser.parse(wordToAdd, definitionResponse);
+      if (!!!definition || definition.length === 0) {
+        throw new Error("Not a word");
+      }
       const addedWords = await AsyncStorageService.getData('@words');        
       if (!!!addedWords || addedWords.length === 0) {
         const wordObj = new Word(wordToAdd, definition, 0);
@@ -132,6 +136,7 @@ const App: () => React$Node = () => {
         }
         <WordDeletionActionSheet actionSheetRef={actionSheetRef} onButtonPress={onDeleteWordPress}/>
         <Spinner isSpinning={isLoading}/>
+        <Text>v{version}</Text>
       </SafeAreaView>
     </>
   );

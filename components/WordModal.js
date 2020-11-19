@@ -33,7 +33,6 @@ const WordModal = (props) => {
 
     const handleChangeText = (word) => {
       setWord(word);    
-      // TODO: Fix this
       setIsValidationError(!(/^(?:[A-Za-z]+|\d+)$/.test(word)));
     };
 
