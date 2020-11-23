@@ -26,6 +26,8 @@ const App: () => React$Node = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [wordIDToDelete, setWordIDToDelete] = useState(undefined);
+  const [isEmulator, setIsEmulator] = useState(undefined);
+
 
   const getWords = async (controlLoading = true) => {
     controlLoading && setLoadingState(true);
@@ -34,7 +36,13 @@ const App: () => React$Node = () => {
     words = words ?? [];
     setWords(words);
   };
+
+  const getIsEmulator = async () => {
+    setIsEmulator(await DeviceInfo.isEmulator());
+  }
+
   useEffect(() => {
+    getIsEmulator();
     getWords();
   }, []);
 
@@ -120,7 +128,7 @@ const App: () => React$Node = () => {
             height={60}
             width={60}
           />
-          {DeviceInfo.isEmulator() && 
+          {isEmulator && 
             <Button 
               onPress={clearButtonPressed}
               height={60}
