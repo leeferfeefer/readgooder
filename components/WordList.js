@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import WordCard from './WordCard';
 import Button from './Button';
+import Slider from '@react-native-community/slider';
 
 const WordList = (props) => {
     const flatListRef = useRef(null);
@@ -28,15 +29,11 @@ const WordList = (props) => {
         words.length > 1 && flatListRef.current.scrollToIndex({animated: true, index: 0});
     }
 
-    const onViewableItemsChanged = ({ viewableItems, changed }) => {
-        setIndex(viewableItems[0].index+1);
+    const handleSliderValueChange = (index) => {    
+        let newScrollIndex = Math.abs(Math.round((index-(words.length-1))*-1));
+        setIndex(newScrollIndex);
+        flatListRef.current.scrollToIndex({index: newScrollIndex});
     }
-
-    const viewabilityConfig = {
-        viewAreaCoveragePercentThreshold: 50
-    }
-    const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }])
-
 
     return (
         <View style={styles.listContainer}>
@@ -49,11 +46,20 @@ const WordList = (props) => {
                 pagingEnabled
                 ListEmptyComponent={emptyListComponent()}
                 data={words}
-                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
                 renderItem={({item, index}) => <WordCard item={item} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>}            
                 keyExtractor={item => `${item.id}`}>            
             </FlatList>
-            <Text>{index} / {words.length}</Text>
+            <Text>{index+1} / {words.length}</Text>
+            <Slider
+                style={{width: 200, height: 40}}
+                minimumValue={0}
+                maximumValue={(words.length-1)}
+                minimumTrackTintColor="#434343"
+                maximumTrackTintColor="#434343"
+                thumbTintColor="#434343"
+                inverted
+                onValueChange={handleSliderValueChange}
+            />
             {/* <Button
                 imageSource={require('../assets/left.png')} 
                 onPress={toTopButtonPressed}
