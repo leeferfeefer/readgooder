@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, {useState, useEffect, createRef} from 'react';
 import {
   SafeAreaView,
@@ -24,6 +16,8 @@ import Word from './models/Word';
 import Alert from './components/Alert';
 import DictionaryService from './services/Dictionary.service';
 import DefinitionParser from './services/DefinitionParser.service';
+import DeviceInfo from 'react-native-device-info';
+import {version} from './package.json';
 
 const actionSheetRef = createRef();
 
@@ -32,6 +26,8 @@ const App: () => React$Node = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [wordIDToDelete, setWordIDToDelete] = useState(undefined);
+  const [isEmulator, setIsEmulator] = useState(undefined);
+
 
   const getWords = async (controlLoading = true) => {
     controlLoading && setLoadingState(true);
@@ -40,7 +36,13 @@ const App: () => React$Node = () => {
     words = words ?? [];
     setWords(words);
   };
+
+  const getIsEmulator = async () => {
+    setIsEmulator(await DeviceInfo.isEmulator());
+  }
+
   useEffect(() => {
+    getIsEmulator();
     getWords();
   }, []);
 
@@ -80,6 +82,9 @@ const App: () => React$Node = () => {
     try {
       const definitionResponse = await DictionaryService.getDefintion(wordToAdd);
       const definition = DefinitionParser.parse(wordToAdd, definitionResponse);
+      if (!!!definition || definition.length === 0) {
+        throw new Error("Not a word");
+      }
       const addedWords = await AsyncStorageService.getData('@words');        
       if (!!!addedWords || addedWords.length === 0) {
         const wordObj = new Word(wordToAdd, definition, 0);
@@ -123,11 +128,13 @@ const App: () => React$Node = () => {
             height={60}
             width={60}
           />
-          {/* <Button 
-            onPress={clearButtonPressed}
-            height={60}
-            width={60}
-          ><Text>Clear Words</Text></Button> */}
+          {isEmulator && 
+            <Button 
+              onPress={clearButtonPressed}
+              height={60}
+              width={60}
+            ><Text>Clear Words</Text></Button>
+          }
         </View>        
         {isModalVisible && 
           <WordModal 
@@ -137,6 +144,7 @@ const App: () => React$Node = () => {
         }
         <WordDeletionActionSheet actionSheetRef={actionSheetRef} onButtonPress={onDeleteWordPress}/>
         <Spinner isSpinning={isLoading}/>
+        <Text>v{version}</Text>
       </SafeAreaView>
     </>
   );

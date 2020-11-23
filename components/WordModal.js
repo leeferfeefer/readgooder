@@ -4,7 +4,8 @@ import {
     StyleSheet,
     View, 
     Modal,
-    TextInput
+    TextInput,
+    Text
 } from 'react-native';
 import Button from './Button';
 
@@ -15,7 +16,9 @@ const WordModal = (props) => {
     const {isVisible, setModalVisbility} = props;
     const [isFocused, setIsFocused] = useState(false);
     const [word, setWord] = useState(undefined);
+    const [isValidationError, setIsValidationError] = useState(false);
 
+  
     const handleFocus = () => {
       setIsFocused(true);      
     };
@@ -27,6 +30,21 @@ const WordModal = (props) => {
     const addButtonPressed = async () => {
       setModalVisbility(false, word);
     }
+
+    const handleChangeText = (word) => {
+      setWord(word);    
+      setIsValidationError(!(/^(?:[A-Za-z]+|\d+)$/.test(word)));
+    };
+
+    const getUnderlineColor = () => {
+      if (isValidationError) {
+        return 'red'
+      };
+      if (isFocused) {
+        return BLUE;
+      }
+      return LIGHT_GRAY;
+    };
 
     return (
         <Modal
@@ -42,18 +60,18 @@ const WordModal = (props) => {
                       style={styles.inputField}
                       placeholder='Add Word'
                       selectionColor={BLUE}
-                      underlineColorAndroid={isFocused ? BLUE : LIGHT_GRAY}              
+                      underlineColorAndroid={getUnderlineColor()}              
                       onFocus={handleFocus}
                       onBlur={handleBlur}
-                      onChangeText={setWord}
+                      onChangeText={handleChangeText}
                       value={word}
                     />
-                    <Button 
-                      imageSource={require('../assets/add.png')} 
-                      onPress={addButtonPressed}
-                      height={30}
-                      width={30}
-                    />
+                    {isValidationError && <Text style={styles.errorMessage}>Only letters!</Text>}
+                    <Button
+                      style={styles.addButtonStyle}
+                      onPress={addButtonPressed}   
+                      isDisabled={isValidationError}           
+                    ><Text>Add</Text></Button>
                 </View>
             </View>
       </Modal>
@@ -87,6 +105,17 @@ const styles = StyleSheet.create({
         height: 50,
         width: '90%',
         marginVertical: 30
+      },
+      addButtonStyle: {
+        height: 30, 
+        width: 100,
+        backgroundColor: LIGHT_GRAY,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      errorMessage: {
+        color: 'red'
       }      
 });
 
