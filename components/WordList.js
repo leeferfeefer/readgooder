@@ -39,7 +39,7 @@ const WordList = (props) => {
 
 
     return (
-        <>
+        <View style={styles.listContainer}>
             <FlatList     
                 ref={flatListRef}
                 onContentSizeChange={() => flatListRef.current.scrollToEnd({animated: true})}
@@ -54,18 +54,23 @@ const WordList = (props) => {
                 keyExtractor={item => `${item.id}`}>            
             </FlatList>
             <Text>{index} / {words.length}</Text>
-            <Button
+            {/* <Button
                 imageSource={require('../assets/left.png')} 
                 onPress={toTopButtonPressed}
                 height={30}
                 width={30}
                 isDisabled={words.length < 2}
-            />
-        </>
+            /> */}
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
+    listContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     list: {    
         flex: 1
     },
