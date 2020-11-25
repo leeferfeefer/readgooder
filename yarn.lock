@@ -5733,6 +5733,11 @@ react-native-device-info@^7.0.2:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-7.0.2.tgz#dcfebd8e879e2a1973156597eba4d6777e67945f"
   integrity sha512-3jzEzzX0Zo5rm+fClPFp3OGUnRPjK0w4X6RCNZtuaNbwMG+Vm3BLcU69dv+UfkYMrCo5JSKV6lA2fG25qq2tuA==
 
+react-native-nav-tabbar@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-nav-tabbar/-/react-native-nav-tabbar-0.0.2.tgz#ab8ab8f81f885fe062ae7cf01f8b366a758b6d6b"
+  integrity sha1-q4q4+B+IX+BirnzwH4s2anWLbWs=
+
 react-native@0.63.3:
   version "0.63.3"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.63.3.tgz#4a7f6540e049ff41810887bbd1125abc4672f3bf"

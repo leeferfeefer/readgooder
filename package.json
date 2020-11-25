@@ -1,6 +1,6 @@
 {
   "name": "readgooder",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "android-debug": "react-native run-android --variant debug",
@@ -23,6 +23,7 @@
     "react-native": "0.63.3",
     "react-native-actions-sheet": "^0.3.5",
     "react-native-device-info": "^7.0.2",
+    "react-native-nav-tabbar": "^0.0.2",
     "yarn": "^1.22.10"
   },
   "devDependencies": {
