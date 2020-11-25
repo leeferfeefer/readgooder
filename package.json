@@ -1,6 +1,6 @@
 {
   "name": "readgooder",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "private": true,
   "scripts": {
     "android-debug": "react-native run-android --variant debug",
@@ -15,6 +15,9 @@
     "@react-native-async-storage/async-storage": "react-native-async-storage/async-storage",
     "@react-native-community/slider": "^3.0.3",
     "add": "^2.0.6",
+    "appcenter": "^4.0.0",
+    "appcenter-analytics": "^4.0.0",
+    "appcenter-crashes": "^4.0.0",
     "axios": "^0.21.0",
     "react": "16.13.1",
     "react-native": "0.63.3",
