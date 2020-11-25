@@ -3,7 +3,8 @@ import {
   SafeAreaView,
   StyleSheet,
   StatusBar,
-  Text
+  Text,
+  View
 } from 'react-native';
 import {version} from './package.json';
 import WordViewer from './screens/WordViewer';
@@ -12,7 +13,7 @@ const App: () => React$Node = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container}>      
         <WordViewer/>
         <Text>v{version}</Text>
       </SafeAreaView>
