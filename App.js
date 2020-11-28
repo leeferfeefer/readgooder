@@ -1,4 +1,4 @@
-import React, {useState, useEffect, createRef} from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
 import {version} from './package.json';
 import WordViewer from './screens/WordViewer';
 
-const App: () => React$Node = () => {
+const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
