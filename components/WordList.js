@@ -12,7 +12,7 @@ import Slider from '@react-native-community/slider';
 const WordList = (props) => {
     const flatListRef = useRef(null);
     const {words, setDeleteWordConfirmSheetVisibility} = props;
-    const [index, setIndex] = useState(words.length);
+    const [index, setIndex] = useState(words.length-1);
 
     useEffect(() => {
         setIndex(words.length);
@@ -51,6 +51,7 @@ const WordList = (props) => {
             </FlatList>
             <Text>{index+1} / {words.length}</Text>
             <Slider
+                disabled={words.length === 0}
                 style={{width: 200, height: 40}}
                 minimumValue={0}
                 maximumValue={(words.length-1)}
