@@ -4,6 +4,7 @@ import {
     StyleSheet,
     View, 
     Text,
+    Dimensions,
 } from 'react-native';
 import WordCard from './WordCard';
 import Button from './Button';
@@ -12,7 +13,7 @@ import Slider from '@react-native-community/slider';
 const WordList = (props) => {
     const flatListRef = useRef(null);
     const {words, setDeleteWordConfirmSheetVisibility} = props;
-    const [index, setIndex] = useState(words.length-1);
+    const [index, setIndex] = useState(words.length);
 
     useEffect(() => {
         setIndex(words.length);
@@ -31,7 +32,7 @@ const WordList = (props) => {
 
     const handleSliderValueChange = (index) => {    
         let newScrollIndex = Math.abs(Math.round((index-(words.length-1))*-1));
-        setIndex(newScrollIndex);
+        setIndex(newScrollIndex+1);
         flatListRef.current.scrollToIndex({index: newScrollIndex});
     }
 
@@ -49,12 +50,12 @@ const WordList = (props) => {
                 renderItem={({item, index}) => <WordCard item={item} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>}            
                 keyExtractor={item => `${item.id}`}>            
             </FlatList>
-            <Text>{index+1} / {words.length}</Text>
+            <Text>{index} / {words.length}</Text>
             <Slider
-                disabled={words.length === 0}
-                style={{width: 200, height: 40}}
+                disabled={!(words.length > 1)}
+                style={{width: Dimensions.get('screen').width, height: 40}}
                 minimumValue={0}
-                maximumValue={(words.length-1)}
+                maximumValue={(words.length === 0 ? 0 : words.length-1)}
                 minimumTrackTintColor="#434343"
                 maximumTrackTintColor="#434343"
                 thumbTintColor="#434343"

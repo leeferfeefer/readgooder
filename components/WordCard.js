@@ -3,12 +3,10 @@ import {
     StyleSheet,
     Dimensions,
     View,
-    Text,
-    ScrollView
+    Text
 } from 'react-native';
 import Button from './Button';
-
-const LIGHT_GRAY = "#D3D3D3";
+import Styles from '../styles';
 
 const WordCard = (props) => {
     const {item, setDeleteWordConfirmSheetVisibility} = props;
@@ -42,7 +40,7 @@ const styles = StyleSheet.create({
     },
     card: {
         margin: 10,
-        backgroundColor: LIGHT_GRAY,
+        backgroundColor: Styles.WordViewerCardBackgroundColor,
         borderRadius: 20,
         flex: 1
     },

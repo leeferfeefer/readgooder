@@ -16,6 +16,8 @@ import Alert from '../components/Alert';
 import DictionaryService from '../services/Dictionary.service';
 import DefinitionParser from '../services/DefinitionParser.service';
 import DeviceInfo from 'react-native-device-info';
+import {version} from '../package.json';
+import Styles from '../styles';
 
 const actionSheetRef = createRef();
 
@@ -113,7 +115,7 @@ const WordViewer = () => {
   }
   
   return (
-    <>
+    <View style={styles.container}>
       <WordList words={words} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>
       <View style={styles.addButtonContainer}>
         <Button 
@@ -138,11 +140,16 @@ const WordViewer = () => {
       }
       <WordDeletionActionSheet actionSheetRef={actionSheetRef} onButtonPress={onDeleteWordPress}/>
       <Spinner isSpinning={isLoading}/>
-    </>
+      <Text style={{textAlign: 'center'}}>v{version}</Text>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Styles.WordViewerBackgroundColor
+  },
   addButtonContainer: {
     alignItems: 'center',
     marginVertical: 50
