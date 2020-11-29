@@ -1,7 +1,7 @@
 
 
 const parse = (word, definitionResponse) => {
-    let definitionConcat = '';
+    let wordStuff = [];
     if (definitionResponse?.length > 0) {
         let definitions = definitionResponse.filter(definition => {
             const metaID = definition?.meta?.id;                
@@ -19,10 +19,14 @@ const parse = (word, definitionResponse) => {
             });
         }
         definitions.forEach(definition => {
-            definitionConcat += definition?.shortdef?.[0]+"\n\n";
+            const wordThingy = {
+                definition: definition?.shortdef?.[0],
+                partOfSpeech: definition?.fl
+            };
+            wordStuff.push(wordThingy);        
         });
     }
-    return definitionConcat;
+    return wordStuff;
 };
 
 export default {

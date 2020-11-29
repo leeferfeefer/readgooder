@@ -30,6 +30,12 @@ const WordList = (props) => {
         words.length > 1 && flatListRef.current.scrollToIndex({animated: true, index: 0});
     }
 
+    const handleOnScroll = (e) => {
+        const index = Math.round(e.nativeEvent.contentOffset.x / Dimensions.get('screen').width);
+        setIndex(index+1);
+
+    }
+
     const handleSliderValueChange = (index) => {    
         let newScrollIndex = Math.abs(Math.round((index-(words.length-1))*-1));
         setIndex(newScrollIndex+1);
@@ -40,6 +46,7 @@ const WordList = (props) => {
         <View style={styles.listContainer}>
             <FlatList     
                 ref={flatListRef}
+                onScroll={handleOnScroll}
                 onContentSizeChange={() => flatListRef.current.scrollToEnd({animated: true})}
                 contentContainerStyle={{ flexGrow: 1 }} 
                 style={styles.list}
