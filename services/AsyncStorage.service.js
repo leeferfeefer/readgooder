@@ -5,7 +5,7 @@ const getData = async (id) => {
       const jsonValue = await AsyncStorage.getItem(id)
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch(e) {
-      console.log("could not retrieve: ", e);
+      throw new Error("Could not retrieve words!");
     }
 };
 
@@ -14,7 +14,7 @@ const storeData = async (value, id) => {
       const jsonValue = JSON.stringify(value)
       await AsyncStorage.setItem(id, jsonValue)
     } catch (e) {
-      console.log("could not save: ", e);
+      throw new Error("Could not save word!");
     }
 };
 
@@ -22,9 +22,8 @@ const clearAll = async () => {
     try {
       await AsyncStorage.clear()
     } catch(e) {
-      console.log("unable to clear!", e);
+      throw new Error("Unable to clear saved data!");
     }
-    console.log('Done.')
   }
 
 export default {

@@ -57,3 +57,8 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+
+# Other
+android/app/debug
+android/app/release

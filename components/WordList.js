@@ -4,6 +4,7 @@ import {
     StyleSheet,
     View, 
     Text,
+    Dimensions,
 } from 'react-native';
 import WordCard from './WordCard';
 import Button from './Button';
@@ -29,9 +30,15 @@ const WordList = (props) => {
         words.length > 1 && flatListRef.current.scrollToIndex({animated: true, index: 0});
     }
 
+    const handleOnScroll = (e) => {
+        const index = Math.round(e.nativeEvent.contentOffset.x / Dimensions.get('screen').width);
+        setIndex(index+1);
+
+    }
+
     const handleSliderValueChange = (index) => {    
         let newScrollIndex = Math.abs(Math.round((index-(words.length-1))*-1));
-        setIndex(newScrollIndex);
+        setIndex(newScrollIndex+1);
         flatListRef.current.scrollToIndex({index: newScrollIndex});
     }
 
@@ -39,6 +46,7 @@ const WordList = (props) => {
         <View style={styles.listContainer}>
             <FlatList     
                 ref={flatListRef}
+                onScroll={handleOnScroll}
                 onContentSizeChange={() => flatListRef.current.scrollToEnd({animated: true})}
                 contentContainerStyle={{ flexGrow: 1 }} 
                 style={styles.list}
@@ -49,11 +57,12 @@ const WordList = (props) => {
                 renderItem={({item, index}) => <WordCard item={item} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>}            
                 keyExtractor={item => `${item.id}`}>            
             </FlatList>
-            <Text>{index+1} / {words.length}</Text>
+            <Text>{index} / {words.length}</Text>
             <Slider
-                style={{width: 200, height: 40}}
+                disabled={!(words.length > 1)}
+                style={{width: Dimensions.get('screen').width, height: 40}}
                 minimumValue={0}
-                maximumValue={(words.length-1)}
+                maximumValue={(words.length === 0 ? 0 : words.length-1)}
                 minimumTrackTintColor="#434343"
                 maximumTrackTintColor="#434343"
                 thumbTintColor="#434343"
