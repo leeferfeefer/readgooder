@@ -35,4 +35,9 @@ workflows:
           build_type: release
           name: build_android_release
           project_path: android
-      - appcenter_android_release
+          requires: 
+            - checkout_code
+      - appcenter_android_release:
+          requires:
+            - build_android_release
+            
