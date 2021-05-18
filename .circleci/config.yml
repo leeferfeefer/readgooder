@@ -3,12 +3,35 @@ version: 2.1
 # Use a package of configuration called an orb.
 orbs:
   # Declare a dependency on the welcome-orb
-  react-native: react-native-community/react-native@5.1.0
+  rn: react-native-community/react-native@5.1.0
   
-# Orchestrate or schedule a set of jobs
+jobs: 
+  checkout_code:
+    executor:
+      name: rn/linux_js
+      node_version: '12'
+    steps:
+      - checkout
+      - persist_to_workspace:
+          paths: .
+          root: .
+    
+  appcenter_android_release:
+    executor: rn/linux_js
+    steps:
+      - attach_workspace:
+          at: .
+      - rn/yarn_install
+      - run:
+          command: bundle exec
+          name: Deploy to Appcenter
+
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  main:
     jobs:
-      - welcome/run
+      - checkout_code
+      - rn/android_build:
+          build_type: release
+          name: build_android_release
+          project_path: android
+      - appcenter_android_release
