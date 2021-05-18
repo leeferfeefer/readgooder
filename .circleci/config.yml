@@ -15,36 +15,28 @@ jobs:
       - persist_to_workspace:
           paths: .
           root: .
-
-  build_android_release:
+    
+  appcenter_android_release:
     executor: rn/linux_js
     steps:
       - attach_workspace:
           at: .
       - rn/yarn_install
       - run:
-          command: exec gradlew assembleRelease
-          name: Build Android Release
-
-  appcenter_android_deploy:
-    executor: rn/linux_js
-    steps:
-      - attach_workspace:
-          at: .
-      # - rn/yarn_install
-      - run:
-          command: exec appcenter login --token $APPCENTER_TOKEN
-          # command: exec ls
+          # command: exec appcenter login --token $APPCENTER_TOKEN
+          command: exec ls
           name: Deploy to Appcenter
-
 workflows:
   main:
     jobs:
       - checkout_code
-      - build_android_release:
-          requires:
+      - rn/android_build:
+          build_type: release
+          name: build_android_release
+          project_path: android
+          requires: 
             - checkout_code
-      - appcenter_android_deploy:
+      - appcenter_android_release:
           requires:
             - build_android_release
             
