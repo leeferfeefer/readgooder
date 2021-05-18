@@ -8,6 +8,8 @@ import {
 import Button from './Button';
 import Styles from '../styles';
 import { ScrollView } from 'react-native-gesture-handler';
+import SoundParserService from '../services/SoundParser.service';
+import Sound from 'react-native-sound';
 
 const WordCard = (props) => {
     const {item, setDeleteWordConfirmSheetVisibility} = props;
@@ -22,16 +24,32 @@ const WordCard = (props) => {
         setDeleteWordConfirmSheetVisibility(true, item.id);
     };
 
-    const onPronounceButtonPressed = () => {
-
+    const onPronounceButtonPressed = (audioFileName) => {
+        const soundURL = SoundParserService.parse(audioFileName);
+        const track = new Sound(soundURL, null, (e) => {
+            if (e) {
+                Alert.showAlert("Ahem!", "Could not play pronunciation. Try again.");
+            } else {
+                track.play();
+            }
+        });
     };
 
     const getDefinitions = () => {
-        return item?.definition.map((wordThingy, index) => {
+        return item?.definition.map((rgDefinition, index) => {
             return (
                 <View key={`${index}_container`} style={{marginBottom: 10, flex: 1}}>
-                    <Text key={`${index}_pos`} style={styles.partOfSpeech}>{wordThingy.partOfSpeech}</Text>                                                          
-                    <Text key={`${index}_def`} style={styles.definition}>{wordThingy.definition}</Text>
+                    <Text key={`${index}_pos`} style={styles.partOfSpeech}>{rgDefinition.partOfSpeech}</Text>    
+                    {rgDefinition.audioFileName && 
+                        <Button
+                            key={`${index}_sound`}
+                                width={20} 
+                                height={20} 
+                                onPress={() => onPronounceButtonPressed(rgDefinition.audioFileName)} 
+                                imageSource={require('../assets/pronounce.png')}
+                            />                   
+                    }                                     
+                    <Text key={`${index}_def`} style={styles.definition}>{rgDefinition.definition}</Text>
                 </View>                
             )
         });
@@ -44,13 +62,7 @@ const WordCard = (props) => {
                     <Text style={styles.word}>{item.word}</Text>                        
                 </Button>            
                 {isWordPressed && 
-                    <ScrollView>       
-                        <Button
-                            width={20} 
-                            height={20} 
-                            onPress={onPronounceButtonPressed} 
-                            imageSource={require('../assets/pronounce.png')}
-                        />         
+                    <ScrollView>             
                         {getDefinitions()}
                     </ScrollView> 
                 }   

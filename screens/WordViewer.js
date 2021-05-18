@@ -2,7 +2,6 @@ import React, {useState, useEffect, createRef} from 'react';
 import {
   StyleSheet,
   View,
-  StatusBar,
   Text
 } from 'react-native';
 import Button from '../components/Button';
@@ -79,18 +78,18 @@ const WordViewer = () => {
     setLoadingState(true);  
     try {
       const definitionResponse = await DictionaryService.getDefintion(wordToAdd);
-      const definition = DefinitionParser.parse(wordToAdd, definitionResponse);
-      if (!!!definition || definition.length === 0) {
+      const definitions = DefinitionParser.parse(wordToAdd, definitionResponse);
+      if (!!!definitions || definitions.length === 0) {
         throw new Error("Not a word");
       }
       const addedWords = await AsyncStorageService.getData('@words');        
       if (!!!addedWords || addedWords.length === 0) {
-        const wordObj = new Word(wordToAdd, definition, 0);
+        const wordObj = new Word(wordToAdd, definitions, 0);
         await AsyncStorageService.storeData([wordObj], '@words');
       } else {
         if (!addedWords.some(addedWord => addedWord.word.toLowerCase() === wordToAdd.toLowerCase())) {      
           const lastWord = addedWords[addedWords.length-1];     
-          const newWord = new Word(wordToAdd, definition, lastWord.id+1);                 
+          const newWord = new Word(wordToAdd, definitions, lastWord.id+1);                 
           await AsyncStorageService.storeData([...addedWords, newWord], '@words');
         } else {
           Alert.showAlert("Ahem!", "You already done did added that ya dummy!");
@@ -98,7 +97,7 @@ const WordViewer = () => {
       } 
       await getWords(false);
     } catch (error) {
-      Alert.showAlert("Ahem!", "Could not add word. Try again.");
+      Alert.showAlert("Ahem!", `Could not add word. Try again. \n\nError: ${error.message}`);
     }
     setLoadingState(false);   
   };
