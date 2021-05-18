@@ -21,6 +21,7 @@
     "add": "^2.0.6",
     "appcenter": "^4.0.0",
     "appcenter-analytics": "^4.0.0",
+    "appcenter-cli": "^2.9.0",
     "appcenter-crashes": "^4.0.0",
     "axios": "^0.21.0",
     "react": "16.13.1",
