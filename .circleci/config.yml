@@ -23,7 +23,7 @@ jobs:
           at: .
       - rn/yarn_install
       - run:
-          command: bundle exec appcenter login --token $APPCENTER_TOKEN
+          command: exec appcenter login --token $APPCENTER_TOKEN
           name: Deploy to Appcenter
 
 workflows:
