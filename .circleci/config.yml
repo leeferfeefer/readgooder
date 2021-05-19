@@ -22,11 +22,14 @@ jobs:
       - attach_workspace:
           at: .
       - rn/yarn_install
+      - run: 
+          command: git config --global user.email "danbfjr@gmail.com" && git config --global user.name "leeferfeefer"
+          name: Setting GitHub Identity...
       - run:
-          command: exec git config --global user.email "danbfjr@gmail.com" && git config --global user.name "leeferfeefer" && npm version minor && git push https://$GITHUB_TOKEN@github.com/leeferfeefer/readgooder.git
+          command: npm version minor && git push https://$GITHUB_TOKEN@github.com/leeferfeefer/readgooder.git
           name: Updating Version...
       - run:
-          command: exec appcenter login --token $APPCENTER_TOKEN && appcenter distribute release --app danbfjr/readgooder --file ./android/app/build/outputs/apk/release/app-release.apk --group Internal
+          command: appcenter login --token $APPCENTER_TOKEN && appcenter distribute release --app danbfjr/readgooder --file ./android/app/build/outputs/apk/release/app-release.apk --group Internal
           name: Deploy to Appcenter...
 workflows:
   main:
