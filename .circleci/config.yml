@@ -23,9 +23,8 @@ jobs:
           at: .
       - rn/yarn_install
       - run:
-          # command: exec appcenter login --token $APPCENTER_TOKEN
-          command: exec ls
-          name: Deploy to Appcenter
+          command: yarn appcenter login --token $APPCENTER_TOKEN --no-telemetry && appcenter distribute release --app danbfjr/readgooder --file ./android/app/build/outputs/apk/release/app-release.apk --group Internal
+          name: Deploy to Appcenter...
 workflows:
   main:
     jobs:
