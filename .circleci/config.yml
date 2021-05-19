@@ -22,9 +22,9 @@ jobs:
       - attach_workspace:
           at: .
       - rn/yarn_install
-      # - run: 
-      #     command: git config --global user.email "danbfjr@gmail.com" && git config --global user.name "leeferfeefer"
-      #     name: Setting GitHub Identity...
+      - run: 
+          command: git config --global user.email "danbfjr@gmail.com" && git config --global user.name "leeferfeefer"
+          name: Setting GitHub Identity...
       - run:
           command: npm version minor && git push https://$GITHUB_TOKEN@github.com/leeferfeefer/readgooder.git
           name: Updating Version...
