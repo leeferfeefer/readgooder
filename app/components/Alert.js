@@ -4,11 +4,14 @@ import {
 } from 'react-native';
 
 
-const showAlert = (title, message) => {
+const showAlert = (title, message, callback) => {
     Alert.alert(title, message,        
-        [
+        [!!callback && {
+          text: "Yes",
+          onPress: callback,
+        },
           {
-            text: "Fine!",
+            text: !!callback ? "No" : "Fine!",
             onPress: () => {},
             style: "cancel"
           }

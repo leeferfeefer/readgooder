@@ -14,7 +14,6 @@ import Word from '../models/Word';
 import Alert from '../components/Alert';
 import DictionaryService from '../services/Dictionary.service';
 import DefinitionParser from '../services/DefinitionParser.service';
-import DeviceInfo from 'react-native-device-info';
 import {version} from '../../package.json';
 import Styles from '../../styles';
 
@@ -25,7 +24,6 @@ const WordViewer = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [wordIDToDelete, setWordIDToDelete] = useState(undefined);
-  const [isEmulator, setIsEmulator] = useState(undefined);
 
   const getWords = async (controlLoading = true) => {
     controlLoading && setLoadingState(true);
@@ -35,12 +33,7 @@ const WordViewer = () => {
     setWords(words);
   };
 
-  const getIsEmulator = async () => {
-    setIsEmulator(await DeviceInfo.isEmulator());
-  }
-
   useEffect(() => {
-    getIsEmulator();
     getWords();
   }, []);
 
@@ -58,8 +51,10 @@ const WordViewer = () => {
   }
   
   const clearButtonPressed = async () => {
-    await AsyncStorageService.clearAll();
-    await getWords();
+    Alert.showAlert("Ahem!", "Are you sure you want to delete all words?", async () => {
+      await AsyncStorageService.clearAll();
+      await getWords();
+    });
   }
 
   const setDeleteWordConfirmSheetVisibility = (isVisible, wordID) => {
@@ -123,13 +118,13 @@ const WordViewer = () => {
           height={60}
           width={60}
         />
-        {isEmulator && 
+        <View style={{marginTop: 40}}>
           <Button 
             onPress={clearButtonPressed}
             height={60}
-            width={60}
-          ><Text>Clear Words</Text></Button>
-        }
+            width={100}
+          ><Text style={{textAlign: 'center'}}>Clear Words</Text></Button>
+        </View>
       </View>        
       {isModalVisible && 
         <WordModal 
