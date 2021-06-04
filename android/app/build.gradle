@@ -137,8 +137,8 @@ android {
         applicationId "com.readgooder"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "2.4.4"
+        versionCode 8
+        versionName "2.4.6"
     }
     splits {
         abi {
