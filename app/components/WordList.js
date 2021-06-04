@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useImperativeHandle, forwardRef} from 'react';
 import {
     FlatList,
     StyleSheet,
@@ -9,8 +9,8 @@ import {
 import WordCard from './WordCard';
 import Slider from '@react-native-community/slider';
 
-const WordList = (props) => {
-    const flatListRef = useRef(null);
+const WordList = (props, ref) => {
+    const flatListRef = useRef();
     const {words, setDeleteWordConfirmSheetVisibility} = props;
     const [index, setIndex] = useState(words.length);
 
@@ -18,6 +18,12 @@ const WordList = (props) => {
         setIndex(words.length);
     }, [words]);
 
+
+    useImperativeHandle(ref, () => ({
+        goToIndex: (index) => {
+            handleSliderValueChange(index);
+        }
+    }));    
 
     const emptyListComponent = () => (
         <View style={styles.emptyListComponent}>
@@ -32,7 +38,6 @@ const WordList = (props) => {
     const handleOnScroll = (e) => {
         const index = Math.round(e.nativeEvent.contentOffset.x / Dimensions.get('screen').width);
         setIndex(index+1);
-
     }
 
     const handleSliderValueChange = (index) => {    
@@ -96,5 +101,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default WordList;
-
+export default forwardRef(WordList);

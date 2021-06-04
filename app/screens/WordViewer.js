@@ -17,13 +17,13 @@ import DefinitionParser from '../services/DefinitionParser.service';
 import {version} from '../../package.json';
 import Styles from '../../styles';
 
-const actionSheetRef = createRef();
-
 const WordViewer = () => {
   const [words, setWords] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [wordIDToDelete, setWordIDToDelete] = useState(undefined);
+  const actionSheetRef = createRef();
+  const wordListRef = createRef();
 
   const getWords = async (controlLoading = true) => {
     controlLoading && setLoadingState(true);
@@ -55,6 +55,11 @@ const WordViewer = () => {
       await AsyncStorageService.clearAll();
       await getWords();
     });
+  }
+
+  const randomizeButtonPressed = () => {
+    const randomNumber = Math.floor(Math.random() * words.length);
+    wordListRef.current.goToIndex(randomNumber);
   }
 
   const setDeleteWordConfirmSheetVisibility = (isVisible, wordID) => {
@@ -110,7 +115,7 @@ const WordViewer = () => {
   
   return (
     <View style={styles.container}>
-      <WordList words={words} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>
+      <WordList ref={wordListRef} words={words} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>
       <View style={styles.addButtonContainer}>
         <Button 
           imageSource={require('../../assets/add.png')} 
@@ -119,11 +124,18 @@ const WordViewer = () => {
           width={60}
         />
         <View style={{marginTop: 40}}>
-          <Button 
-            onPress={clearButtonPressed}
-            height={60}
-            width={100}
-          ><Text style={{textAlign: 'center'}}>Clear Words</Text></Button>
+          <View style={{flexDirection: 'row'}}>
+            <Button 
+              onPress={randomizeButtonPressed}
+              height={60}
+              width={60}
+            ><Text style={{textAlign: 'center'}}>?</Text></Button>
+            <Button 
+              onPress={clearButtonPressed}
+              height={60}
+              width={100}
+            ><Text style={{textAlign: 'center'}}>Clear Words</Text></Button>
+          </View>
         </View>
       </View>        
       {isModalVisible && 
