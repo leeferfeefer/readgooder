@@ -14,7 +14,7 @@ const WordDeletionActionSheet = (props) => {
             <View style={styles.container}>
                 <Text>Delete this word?</Text>
                 <Button
-                    imageSource={require('../assets/delete.png')} 
+                    imageSource={require('../../assets/delete.png')} 
                     onPress={onButtonPress}
                     height={60}
                     width={60}

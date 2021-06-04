@@ -2,10 +2,9 @@ import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  StatusBar,
-  Text
+  StatusBar
 } from 'react-native';
-import Navigation from './navigation/Navigation';
+import Navigation from './app/navigation/Navigation';
 
 const App = () => {
   return (

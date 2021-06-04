@@ -15,8 +15,8 @@ import Alert from '../components/Alert';
 import DictionaryService from '../services/Dictionary.service';
 import DefinitionParser from '../services/DefinitionParser.service';
 import DeviceInfo from 'react-native-device-info';
-import {version} from '../package.json';
-import Styles from '../styles';
+import {version} from '../../package.json';
+import Styles from '../../styles';
 
 const actionSheetRef = createRef();
 
@@ -118,7 +118,7 @@ const WordViewer = () => {
       <WordList words={words} setDeleteWordConfirmSheetVisibility={setDeleteWordConfirmSheetVisibility}/>
       <View style={styles.addButtonContainer}>
         <Button 
-          imageSource={require('../assets/add.png')} 
+          imageSource={require('../../assets/add.png')} 
           onPress={addButtonPressed}
           height={60}
           width={60}

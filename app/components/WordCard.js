@@ -6,7 +6,7 @@ import {
     Text
 } from 'react-native';
 import Button from './Button';
-import Styles from '../styles';
+import Styles from '../../styles';
 import { ScrollView } from 'react-native-gesture-handler';
 import SoundParserService from '../services/SoundParser.service';
 import Sound from 'react-native-sound';
@@ -46,7 +46,7 @@ const WordCard = (props) => {
                                 width={20} 
                                 height={20} 
                                 onPress={() => onPronounceButtonPressed(rgDefinition.audioFileName)} 
-                                imageSource={require('../assets/pronounce.png')}
+                                imageSource={require('../../assets/pronounce.png')}
                             />                   
                     }                                     
                     <Text key={`${index}_def`} style={styles.definition}>{rgDefinition.definition}</Text>

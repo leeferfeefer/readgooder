@@ -7,7 +7,6 @@ import {
     Dimensions,
 } from 'react-native';
 import WordCard from './WordCard';
-import Button from './Button';
 import Slider from '@react-native-community/slider';
 
 const WordList = (props) => {
