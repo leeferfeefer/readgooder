@@ -1,11 +1,10 @@
-
 import React, {useState} from 'react';
 import {
     StyleSheet,
     View, 
     Modal,
     TextInput,
-    Text
+    Text,
 } from 'react-native';
 import Button from './Button';
 
@@ -13,69 +12,73 @@ const BLUE = "#428AF8";
 const LIGHT_GRAY = "#D3D3D3";
 
 const WordModal = (props) => {
-    const {isVisible, setModalVisbility} = props;
-    const [isFocused, setIsFocused] = useState(false);
-    const [word, setWord] = useState(undefined);
-    const [isValidationError, setIsValidationError] = useState(false);
+  const {isVisible, setModalVisbility} = props;
+  const [isFocused, setIsFocused] = useState(false);
+  const [word, setWord] = useState(undefined);
+  const [isValidationError, setIsValidationError] = useState(false);
 
-  
-    const handleFocus = () => {
-      setIsFocused(true);      
-    };
 
-    const handleBlur = () => {
-      setIsFocused(false);
-    };
+  const handleFocus = () => {
+    setIsFocused(true);      
+  };
 
-    const addButtonPressed = async () => {
-      setModalVisbility(false, word);
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+  const addButtonPressed = async () => {
+    setModalVisbility(false, word);
+  }
+
+  const handleChangeText = (word) => {
+    setWord(word);    
+    if (word === '') {
+      setIsValidationError(false);
+    } else {
+      setIsValidationError(!(/^(?:[a-zA-Z0-9]+|\d+)$/.test(word))); 
     }
+  };
 
-    const handleChangeText = (word) => {
-      setWord(word);    
-      setIsValidationError(!(/^(?:[A-Za-z]+|\d+)$/.test(word)));
+  const getUnderlineColor = () => {
+    if (isValidationError) {
+      return 'red'
     };
+    if (isFocused) {
+      return BLUE;
+    }
+    return LIGHT_GRAY;
+  };
 
-    const getUnderlineColor = () => {
-      if (isValidationError) {
-        return 'red'
-      };
-      if (isFocused) {
-        return BLUE;
-      }
-      return LIGHT_GRAY;
-    };
-
-    return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={isVisible}
-            onRequestClose={() => {
-              setModalVisbility(false); 
-            }}>
-            <View style={styles.container}>
-                <View style={styles.modalView}>
-                    <TextInput 
-                      style={styles.inputField}
-                      placeholder='Add Word'
-                      selectionColor={BLUE}
-                      underlineColorAndroid={getUnderlineColor()}              
-                      onFocus={handleFocus}
-                      onBlur={handleBlur}
-                      onChangeText={handleChangeText}
-                      value={word}
-                    />
-                    {isValidationError && <Text style={styles.errorMessage}>Only letters!</Text>}
-                    <Button
-                      style={styles.addButtonStyle}
-                      onPress={addButtonPressed}   
-                      isDisabled={isValidationError}           
-                    ><Text>Add</Text></Button>
-                </View>
-            </View>
-      </Modal>
-    );
+  return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isVisible}
+        onRequestClose={() => {
+          setModalVisbility(false); 
+        }}>
+        <View style={styles.container}>
+          <View style={styles.modalView}>
+              <TextInput 
+                style={styles.inputField}
+                placeholder='Add Word'
+                selectionColor={BLUE}
+                underlineColorAndroid={getUnderlineColor()}              
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onChangeText={handleChangeText}
+                value={word}
+              />
+              {isValidationError && <Text style={styles.errorMessage}>Only letters!</Text>}
+              <Button
+                style={styles.addButtonStyle}
+                onPress={addButtonPressed}   
+                isDisabled={isValidationError}           
+              ><Text>{!!word ? 'Add' : 'Close'}</Text></Button>
+          </View>
+      </View>
+    </Modal>
+  );
 }
 
 
